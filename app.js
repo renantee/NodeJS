@@ -9,6 +9,16 @@ const server = http.createServer((req, res) => {
   res.end('Hello Node.js!\n')
 })
 
-server.listen(port, hostname, () => {
-  console.log(`Server running at http://${hostname}:${port}/`)
+server.listen(port, hostname, () => {  
+  console.log('All parameters')
+  process.argv.forEach((val, index) => {    
+    console.log(`${index}: ${val}`)
+  })
+
+  console.log('\nExclude first 2 parameters')
+  const args = process.argv.slice(2)
+  
+  args.forEach((val, index) => {
+    console.log(`${index}: ${val}`)
+  })
 })
