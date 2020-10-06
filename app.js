@@ -21,4 +21,8 @@ server.listen(port, hostname, () => {
   args.forEach((val, index) => {
     console.log(`${index}: ${val}`)
   })
+
+  console.log('\nUsing minimist')
+  const args2 = require('minimist')(process.argv.slice(2))
+  console.log(args2['name'])
 })
