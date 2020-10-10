@@ -1,2 +1,4 @@
 express-demo/.env
 express-demo/node_modules
+passport-login/.env
+passport-login/node_modules
