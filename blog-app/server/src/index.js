@@ -1,3 +1,6 @@
+// Import dotenv
+require('dotenv').config()
+
 // Import express
 const express = require('express');
 
@@ -10,12 +13,26 @@ const bodyParser = require('body-parser');
 // Import express validator
 const { body, validationResult } = require('express-validator');
 
+// Import mongoose
+const mongoose = require('mongoose')
+
+// DB Config
+const db = require('./config/keys').MongoURI
+
+// Connect to MongoURI
+mongoose.connect(db, { userNewUrlParser: true })
+  .then(() => console.log('MongoDB connected...'))
+  .catch(err => console.log(err))
+
 // Initialize express
 const app = express();
 
 // Use the body parser middleware to allow 
 // express to recognize JSON requests
 app.use(bodyParser.json());
+
+// Post model
+const Post = require('./models/Post')
 
 // Error handler
 function createError(message) {
@@ -31,6 +48,17 @@ function createError(message) {
 // Function to generate ID
 function generateId() {
   return '_' + Math.random().toString(36).substr(2, 16);
+}
+
+// Function to generate next sequence
+function getNextSequence(name) {
+  var ret = db.counters.findAndModify({
+    query: { _id: name },
+    update: { $inc: { seq: 1 } },
+    new: true
+  });
+
+  return ret.seq;
 }
 
 // Post Array
@@ -66,17 +94,18 @@ app.post(
   // Retrieve variables from the request body
   const { title, content } = req.body;
 
-  // Generate a random ID for the post
-  const id = generateId();
+  // Generate next ID for the post
+  const id = getNextSequence('postid');
 
-  const post = {
+  // Instantiate post model
+  const post = new Post({
     id,
     title,
     content
-  }
+  })
 
-  // Add the post to the list of posts
-  posts.push(post);
+  // Save post
+  post.save();
 
   // Return the post with 201 status code which will 
   // signify the successful creation of the post
@@ -200,7 +229,10 @@ app.all('*', (req, res) => {
   )
 })
 
-// Expose endpoints to port 3000
-app.listen(3000, () => {
-  console.log("Listening to port 3000");
+// Set port
+const PORT = process.env.PORT || 3000
+
+// Expose endpoints to port ${PORT}
+app.listen(PORT, () => {
+  console.log(`Listening to port ${PORT}`)
 });
