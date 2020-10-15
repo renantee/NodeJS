@@ -1,10 +1,17 @@
-const mongoose = require('mongoose')
+var mongoose = require('mongoose'),
+    Schema = mongoose.Schema,
+    autoIncrement = require('mongoose-auto-increment')
 
-const PostSchema = new mongoose.Schema({
+const db = require('../config/keys').MongoURL
+
+var connection = mongoose.createConnection(db)
+
+autoIncrement.initialize(connection)
+
+var postSchema = new Schema({
   id: {
     type: Number,
-    unique: true,
-    min: 1
+    required: true
   },
   title: {
     type: String,
@@ -20,6 +27,11 @@ const PostSchema = new mongoose.Schema({
   }
 })
 
-const Post = mongoose.model('Post', PostSchema)
+postSchema.plugin(autoIncrement.plugin, {
+  model: 'Post',
+  field: 'id',
+  startAt: 1
+})
+const Post = connection.model('Post', postSchema)
 
 module.exports = Post

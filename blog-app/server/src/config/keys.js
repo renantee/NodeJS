@@ -2,5 +2,5 @@
 const MONGOURL = process.env.MONGOURL || 'localhost'
 
 module.exports = {
-  MongoURI: MONGOURL
+  MongoURL: MONGOURL
 }
