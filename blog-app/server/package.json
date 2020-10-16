@@ -1,23 +1,27 @@
 {
-  "name": "server",
+  "name": "blog-app-node-api",
   "version": "1.0.0",
-  "description": "",
+  "description": "Blog Application NodeJS API",
   "main": "index.js",
   "scripts": {
     "start": "nodemon -x node src/index.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
-  "author": "",
+  "author": "Renante D. Entera",
   "license": "ISC",
   "dependencies": {
     "body-parser": "^1.19.0",
+    "cors": "^2.8.5",
     "dotenv": "^8.2.0",
     "express": "^4.17.1",
+    "express-jwt": "^6.0.0",
     "express-validator": "^6.6.1",
+    "jsonwebtoken": "^8.5.1",
     "lodash": "^4.17.20",
     "mongoose": "^5.10.9",
-    "mongoose-auto-increment": "^5.0.1"
+    "mongoose-auto-increment": "^5.0.1",
+    "rootpath": "^0.1.2"
   },
   "devDependencies": {
     "nodemon": "^2.0.4"

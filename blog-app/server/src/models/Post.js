@@ -2,9 +2,9 @@ var mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     autoIncrement = require('mongoose-auto-increment')
 
-const db = require('../config/keys').MongoURL
+const config = require('src/config/keys')
 
-var connection = mongoose.createConnection(db)
+var connection = mongoose.createConnection(config.MONGO_URL)
 
 autoIncrement.initialize(connection)
 
@@ -32,6 +32,7 @@ postSchema.plugin(autoIncrement.plugin, {
   field: 'id',
   startAt: 1
 })
+
 const Post = connection.model('Post', postSchema)
 
 module.exports = Post

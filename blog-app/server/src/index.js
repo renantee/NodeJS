@@ -1,27 +1,24 @@
-// Import dotenv
 require('dotenv').config()
+require('rootpath')()
 
-// Import express
 const express = require('express')
-
-// Import lodash
-const _ = require('lodash')
-
-// Import body parser
+const cors = require('cors')
 const bodyParser = require('body-parser')
+const jwt = require('src/_helpers/jwt')
+const errorHandler = require('src/_helpers/error-handler')
 
-// Import express validator
 const { body, validationResult } = require('express-validator')
-
-// Initialize express
 const app = express()
 
-// Use the body parser middleware to allow 
-// express to recognize JSON requests
+app.use(bodyParser.urlencoded({ extended: false }))
 app.use(bodyParser.json())
+app.use(cors())
+
+// use JWT auth to secure the api
+//app.use(jwt())
 
 // Post model
-const Post = require('./models/Post')
+const Post = require('src/models/Post')
 
 // Error handler
 function createError(message) {
@@ -75,7 +72,7 @@ app.post(
     }
       
     return res.status(201).send(post)
-  });
+  })
 })
 
 // Endpoint to list all the posts
@@ -90,7 +87,7 @@ app.get('/api/posts/', (req, res) => {
     // Return the list of posts
     // status code 200 to signify successful retrieval
     res.send(posts)
-  });
+  })
 })
 
 // Endpoint to retrieve a post by its id
@@ -174,8 +171,11 @@ app.delete('/api/posts/:id', (req, res) => {
     res.send({
       'message': `Post with id ${id} has been successfully deleted`
     })
-  });
+  })
 })
+
+// API routes
+app.use('/api/users', require('src/routes/users'))
 
 // Return an error if route does not exist in our server
 app.all('*', (req, res) => {
@@ -183,6 +183,9 @@ app.all('*', (req, res) => {
      createError('Not found')
   )
 })
+
+// Global error handler
+app.use(errorHandler)
 
 // Set port
 const PORT = process.env.PORT || 3000
