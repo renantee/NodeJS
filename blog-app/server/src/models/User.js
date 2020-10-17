@@ -1,5 +1,4 @@
 const config = require('src/config/keys');
-
 const mongoose = require('mongoose'),
     Schema = mongoose.Schema,
     autoIncrement = require('mongoose-auto-increment');
@@ -13,26 +12,46 @@ const schema = new Schema({
     type: Number,
     required: true
   },
-  title: {
+  username: {
     type: String,
-    require: true
+    unique: true,
+    required: true
   },
-  content: {
+  hash: {
     type: String,
-    require: true
+    required: true
   },
-  date: {
+  firstName: {
+    type: String,
+    required: true
+  },
+  lastName: {
+    type: String,
+    required: true
+  },
+  createdDate: {
     type: Date,
     default: Date.now
   }
 });
 
 schema.plugin(autoIncrement.plugin, {
-  model: 'Post',
+  model: 'User',
   field: 'id',
   startAt: 1
 });
 
-const Post = connection.model('Post', schema);
+schema.set('toJSON', {
+  virtuals: true,
+  versionKey: false,
+  transform: (doc, ret) => {
+    delete ret._id;
+    delete ret.hash;
+  }
+});
 
-module.exports = Post;
+const User = connection.model('User', schema);
+module.exports = User;
+
+/*User = mongoose.model('User', schema);
+module.exports = User;*/
