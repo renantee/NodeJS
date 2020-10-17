@@ -1,3 +1,5 @@
+blog-app/server/.env
+blog-app/server/node_modules
 express-demo/.env
 express-demo/node_modules
 passport-login/.env
