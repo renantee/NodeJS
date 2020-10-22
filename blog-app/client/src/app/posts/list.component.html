@@ -3,8 +3,9 @@
 <table class="table table-striped">
     <thead>
         <tr>
-            <th style="width: 30%">Title</th>
-            <th style="width: 60%">Content</th>
+            <th style="width: 25%">Title</th>
+            <th style="width: 50%">Content</th>
+            <th style="width: 15%;">Date</th>
             <th style="width: 10%;"></th>
         </tr>
     </thead>
@@ -12,9 +13,10 @@
         <tr *ngFor="let post of posts">
             <td>{{post.title}}</td>
             <td>{{post.content}}</td>
+            <td>{{post.date | date:short}}</td>
             <td style="white-space: nowrap">
                 <a routerLink="edit/{{post.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
-                <button (click)="deletepost(post.id)" class="btn btn-sm btn-danger btn-delete-post" [disabled]="post.isDeleting">
+                <button (click)="deletePost(post.id)" class="btn btn-sm btn-danger btn-delete-post" [disabled]="post.isDeleting">
                     <span *ngIf="post.isDeleting" class="spinner-border spinner-border-sm"></span>
                     <span *ngIf="!post.isDeleting">Delete</span>
                 </button>

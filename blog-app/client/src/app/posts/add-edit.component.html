@@ -9,9 +9,11 @@
                 <div *ngIf="f.title.errors.required">Title is required</div>
             </div>
         </div>
+    </div>
+    <div class="form-row">
         <div class="form-group col">
             <label for="content">Content</label>
-            <input type="text" formControlName="content" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.content.errors }" />
+            <textarea formControlName="content" class="form-control" [ngClass]="{ 'is-invalid': submitted && f.content.errors }"></textarea>
             <div *ngIf="submitted && f.content.errors" class="invalid-feedback">
                 <div *ngIf="f.content.errors.required">Content is required</div>
             </div>
@@ -22,6 +24,6 @@
             <span *ngIf="loading" class="spinner-border spinner-border-sm mr-1"></span>
             Save
         </button>
-        <a routerLink="/users" class="btn btn-link">Cancel</a>
+        <a routerLink="/posts" class="btn btn-link">Cancel</a>
     </div>
 </form>

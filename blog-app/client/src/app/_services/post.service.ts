@@ -8,19 +8,7 @@ import { Post } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
-    private postSubject: BehaviorSubject<Post>;
-    public post: Observable<Post>;
-
-    constructor(
-        private http: HttpClient
-    ) {
-        this.postSubject = new BehaviorSubject<Post>(JSON.parse(localStorage.getItem('post')));
-        this.post = this.postSubject.asObservable();
-    }
-
-    public get postValue(): Post {
-        return this.postSubject.value;
-    }
+    constructor (private http: HttpClient) {}
 
     getAll() {
         return this.http.get<Post[]>(`${environment.apiUrl}/posts`);
@@ -37,15 +25,6 @@ export class PostService {
     update(id, params) {
         return this.http.put(`${environment.apiUrl}/posts/${id}`, params)
             .pipe(map(x => {
-                // update stored post if the logged in post updated their own record
-                if (id == this.postValue.id) {
-                    // update local storage
-                    const post = { ...this.postValue, ...params };
-                    localStorage.setItem('post', JSON.stringify(post));
-
-                    // publish updated post to subscribers
-                    this.postSubject.next(post);
-                }
                 return x;
             }));
     }
