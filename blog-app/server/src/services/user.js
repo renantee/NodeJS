@@ -26,11 +26,13 @@ async function authenticate({ username, password }) {
 }
 
 async function getAll() {  
-  return await User.find();
+  return await User.find()
+    .populate('posts');
 }
 
 async function getById(id) {
-  return await User.findOne({ id });
+  return await User.findOne({ id })
+    .populate('posts');
 }
 
 async function create(userParam) {

@@ -32,7 +32,11 @@ const schema = new Schema({
   createdDate: {
     type: Date,
     default: Date.now
-  }
+  },
+  posts: [{
+    type: Schema.Types.ObjectId,
+    ref: 'Post'
+  }]
 });
 
 schema.plugin(autoIncrement.plugin, {
@@ -52,6 +56,3 @@ schema.set('toJSON', {
 
 const User = connection.model('User', schema);
 module.exports = User;
-
-/*User = mongoose.model('User', schema);
-module.exports = User;*/
