@@ -45,7 +45,7 @@ function getById(req, res, next) {
 
 function update(req, res, next) {
   userService.update(req.params.id, req.body)
-    .then(() => res.json({}))
+    .then(user => user ? res.json(user) : res.sendStatus(404))
     .catch(err => next(err))
 }
 

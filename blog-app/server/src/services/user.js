@@ -1,9 +1,12 @@
 const config = require('src/config/keys');
+const mongoose = require('mongoose');
+const connection = mongoose.createConnection(config.MONGO_URL, { useNewUrlParser: true });
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcryptjs');
 
-// User model
-const User = require('src/models/User');
+// Models
+const Post = require('src/models/Post')(connection);
+const User = require('src/models/User')(connection);
 
 module.exports = {
   authenticate,
@@ -25,14 +28,14 @@ async function authenticate({ username, password }) {
   }
 }
 
-async function getAll() {  
+async function getAll() {
   return await User.find()
-    .populate('posts');
+    .populate({ path: 'posts', select: 'title content date', model: Post });
 }
 
 async function getById(id) {
   return await User.findOne({ id })
-    .populate('posts');
+    .populate({ path: 'posts', select: 'title content date', model: Post });
 }
 
 async function create(userParam) {
@@ -69,7 +72,11 @@ async function update(id, userParam) {
   // copy userParam properties to user
   Object.assign(user, userParam);
 
+  // update existing user
   await user.save();
+
+  // return updated user
+  return user.populate({ path: 'posts', select: 'title content date', model: Post });
 }
 
 async function _delete(id) {

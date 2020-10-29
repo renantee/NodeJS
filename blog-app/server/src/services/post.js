@@ -1,9 +1,10 @@
 const config = require('src/config/keys');
-const jwt = require('jsonwebtoken');
-const bcrypt = require('bcryptjs');
+const mongoose = require('mongoose');
+const connection = mongoose.createConnection(config.MONGO_URL, { useNewUrlParser: true });
 
-// Post model
-const Post = require('src/models/Post');
+// Models
+const Post = require('src/models/Post')(connection);
+const User = require('src/models/User')(connection);
 
 module.exports = {
   create,
@@ -24,15 +25,18 @@ async function create(postParam) {
 }
 
 async function getAll() {  
-  return await Post.find({}, null, { sort: { date: -1 } });
+  return await Post.find({}, null, { sort: { date: -1 } })
+    .populate({ path: 'author', select: 'firstName lastName role', model: User });
 }
 
 async function getById(id) {
-  return await Post.findOne({ id });
+  return await Post.findOne({ id })
+    .populate({ path: 'author', select: 'firstName lastName role', model: User });
 }
 
 async function update(id, postParam) {
-  const post = await Post.findOne({ id });
+  const post = await Post.findOne({ id })
+    .populate({ path: 'author', select: 'firstName lastName role', model: User });
 
   // copy postParam properties to post
   Object.assign(post, postParam);
