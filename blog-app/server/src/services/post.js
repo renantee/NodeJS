@@ -16,12 +16,18 @@ module.exports = {
 
 async function create(postParam) {  
   const post = new Post(postParam);
+  const user = await User.findById(postParam.author);
 
   // save post
   await post.save();
 
+  // update user's post list
+  user.posts = user.posts.concat(post._id);
+  await user.save();
+
   // return newly-created post
-  return post;
+  return await Post.findById(post._id)
+    .populate({ path: 'author', select: 'firstName lastName role', model: User });
 }
 
 async function getAll() {  

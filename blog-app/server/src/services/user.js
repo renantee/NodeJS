@@ -30,12 +30,12 @@ async function authenticate({ username, password }) {
 
 async function getAll() {
   return await User.find()
-    .populate({ path: 'posts', select: 'title content date', model: Post });
+    .populate({ path: 'posts', select: 'id title content date', model: Post });
 }
 
 async function getById(id) {
   return await User.findOne({ id })
-    .populate({ path: 'posts', select: 'title content date', model: Post });
+    .populate({ path: 'posts', select: 'id title content date', model: Post });
 }
 
 async function create(userParam) {
@@ -76,7 +76,7 @@ async function update(id, userParam) {
   await user.save();
 
   // return updated user
-  return user.populate({ path: 'posts', select: 'title content date', model: Post });
+  return user.populate({ path: 'posts', select: 'id title content date', model: Post });
 }
 
 async function _delete(id) {
