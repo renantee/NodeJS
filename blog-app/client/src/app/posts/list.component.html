@@ -1,11 +1,12 @@
-﻿<h1>Posts</h1>
+﻿<h1>{{my}}Posts</h1>
 <a routerLink="add" class="btn btn-sm btn-success mb-2">Add Post</a>
 <table class="table table-striped">
     <thead>
         <tr>
             <th style="width: 25%">Title</th>
-            <th style="width: 50%">Content</th>
-            <th style="width: 15%;">Date</th>
+            <th style="width: 40%">Content</th>
+            <th style="width: 10%;">Author</th>
+            <th style="width: 15%;">Date</th>            
             <th style="width: 10%;"></th>
         </tr>
     </thead>
@@ -13,6 +14,7 @@
         <tr *ngFor="let post of posts">
             <td>{{post.title}}</td>
             <td>{{post.content}}</td>
+            <td>{{post.author.firstName}} {{post.author.lastName}}</td>
             <td>{{post.date | date:short}}</td>
             <td style="white-space: nowrap">
                 <a routerLink="edit/{{post.id}}" class="btn btn-sm btn-primary mr-1">Edit</a>
