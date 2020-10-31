@@ -23,6 +23,11 @@ const routes: Routes = [
         data: { roles: [Role.Admin] }
     },
     { 
+        path: 'my-posts', 
+        loadChildren: postsModule, 
+        canActivate: [AuthGuard]
+    },
+    { 
         path: 'posts', 
         loadChildren: postsModule, 
         canActivate: [AuthGuard],

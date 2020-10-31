@@ -47,7 +47,6 @@ module.exports = (connection) =>  {
     virtuals: true,
     versionKey: false,
     transform: (doc, ret) => {
-      delete ret._id;
       delete ret.hash;
     }
   });

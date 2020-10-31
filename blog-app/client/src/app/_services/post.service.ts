@@ -1,10 +1,9 @@
 ﻿import { Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
-import { BehaviorSubject, Observable } from 'rxjs';
 import { map } from 'rxjs/operators';
 
 import { environment } from '@environments/environment';
-import { Post } from '@app/_models';
+import { Post, User } from '@app/_models';
 
 @Injectable({ providedIn: 'root' })
 export class PostService {
@@ -20,6 +19,10 @@ export class PostService {
 
     getById(id: string) {
         return this.http.get<Post>(`${environment.apiUrl}/posts/${id}`);
+    }
+
+    getMyPosts() {
+        return this.http.get<User>(`${environment.apiUrl}/users/my-posts`);
     }
 
     update(id, params) {

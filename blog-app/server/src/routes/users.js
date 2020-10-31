@@ -1,5 +1,6 @@
 const express = require('express');
 const router = express.Router();
+const postService = require('src/services/post');
 const userService = require('src/services/user');
 
 // Routes
@@ -7,6 +8,7 @@ router.post('/authenticate', authenticate);
 router.post('/register', register);
 router.get('/', getAll);
 router.get('/current', getCurrent);
+router.get('/my-posts', getMyPosts);
 router.get('/:id', getById);
 router.put('/:id', update);
 router.delete('/:id', _delete);
@@ -35,6 +37,17 @@ function getCurrent(req, res, next) {
   userService.getById(req.user.sub)
     .then(user => user ? res.json(user) : res.sendStatus(404))
     .catch(err => next(err));
+}
+
+function getMyPosts(req, res, next) {
+  // Retrieve author details
+  (async () => {
+    const author = await userService.getById(req.user.sub);
+
+    postService.getByAuthor(author._id)
+      .then(posts => res.json(posts))
+      .catch(err => next(err));
+  })()
 }
 
 function getById(req, res, next) {

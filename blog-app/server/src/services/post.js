@@ -9,7 +9,8 @@ const User = require('src/models/User')(connection);
 module.exports = {
   create,
   getAll,
-  getById,  
+  getByAuthor,
+  getById,
   update,
   delete: _delete
 };
@@ -32,6 +33,11 @@ async function create(postParam) {
 
 async function getAll() {  
   return await Post.find({}, null, { sort: { date: -1 } })
+    .populate({ path: 'author', select: 'firstName lastName role', model: User });
+}
+
+async function getByAuthor(author) {
+  return await Post.find({ author })
     .populate({ path: 'author', select: 'firstName lastName role', model: User });
 }
 

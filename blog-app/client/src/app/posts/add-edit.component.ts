@@ -3,7 +3,8 @@ import { Router, ActivatedRoute } from '@angular/router';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { first } from 'rxjs/operators';
 
-import { PostService, AlertService } from '@app/_services';
+import { User } from '@app/_models';
+import { AccountService, AlertService, PostService } from '@app/_services';
 
 @Component({ templateUrl: 'add-edit.component.html' })
 export class AddEditComponent implements OnInit {
@@ -12,23 +13,36 @@ export class AddEditComponent implements OnInit {
     isAddMode: boolean;
     loading = false;
     submitted = false;
+    user: User;
 
     constructor(
         private formBuilder: FormBuilder,
         private route: ActivatedRoute,
         private router: Router,
+        private accountService: AccountService,
+        private alertService: AlertService,
         private postService: PostService,
-        private alertService: AlertService
-    ) {}
+    ) {
+        this.user = this.accountService.userValue;
+    }
 
     ngOnInit() {
         this.id = this.route.snapshot.params['id'];
         this.isAddMode = !this.id;
         
-        this.form = this.formBuilder.group({
-            title: ['', Validators.required],
-            content: ['', Validators.required]
-        });
+        // Pass Author Reference When Creating a Post
+        if (this.isAddMode) {
+            this.form = this.formBuilder.group({
+                author: this.user._id,
+                title: ['', Validators.required],
+                content: ['', Validators.required]
+            });
+        } else {
+            this.form = this.formBuilder.group({
+                title: ['', Validators.required],
+                content: ['', Validators.required]
+            });
+        }
 
         if (!this.isAddMode) {
             this.postService.getById(this.id)

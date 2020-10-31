@@ -53,6 +53,10 @@ export class AccountService {
         return this.http.get<User>(`${environment.apiUrl}/users/${id}`);
     }
 
+    getCurrentUser() {
+        return this.http.get<User[]>(`${environment.apiUrl}/users/current`);
+    }
+
     update(id, params) {
         return this.http.put(`${environment.apiUrl}/users/${id}`, params)
             .pipe(map(x => {
